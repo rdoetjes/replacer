@@ -10,7 +10,7 @@ fn main() -> std::io::Result<()> {
     let source = open_file(&args[1]);
     let vars = open_file(&args[2]);
     let encode_as = &args[3];
-    let replaced = replace_tokes(&source, &vars, &encode_as.to_string());
+    let replaced = replace_tokens(&source, &vars, &encode_as.to_string());
 
     println!("{}", replaced);
 
@@ -68,17 +68,17 @@ fn open_file(file: &str) -> String {
 ///     vars: contains the json string documenting a list in key value pair like:
 /// ```
 /// {
-///"vars": {
-///    "%env%": "D",
-///    "THIS": "<this>"
-///  }
-///}
+///    "vars": {
+///      "%env%": "D",
+///      "THIS": "<this>"
+///    }
+/// }
 ///```
 /// encode_as: can contain the string html (for html escaping) or txt (for no esaping/encoding)
 ///
 /// # Returns:
 /// A new string with the replaced keys (tokens)
-fn replace_tokes(source: &String, vars: &String, encode_as: &String) -> String {
+fn replace_tokens(source: &String, vars: &String, encode_as: &String) -> String {
     let mut result: String;
     result = source.clone();
 
@@ -146,14 +146,14 @@ mod test {
         let json = open_file("vars.json");
         let template = open_file("template.txt");
 
-        let mut result = replace_tokes(&template, &json, &String::from("txt"));
+        let mut result = replace_tokens(&template, &json, &String::from("txt"));
         assert_eq!(result.contains("Where you see D it should say D"), true);
         assert_eq!(
             result.contains(r#"Where we see <this> it should say this"#),
             true
         );
 
-        result = replace_tokes(&template, &json, &String::from("html"));
+        result = replace_tokens(&template, &json, &String::from("html"));
         assert_eq!(result.contains(r#"&lt;this&gt;"#), true);
     }
 }
