@@ -9,7 +9,7 @@ fn main() -> std::io::Result<()> {
     let source = open_file(&args[1]);
     let vars = open_file(&args[2]);
     let encode_as = &args[3];
-    let replaced = replace_tokes(source, vars, encode_as.to_string());
+    let replaced = replace_tokes(&source, &vars, &encode_as.to_string());
 
     println!("{}", replaced);
     if args.len() == 4 {
@@ -38,7 +38,7 @@ fn open_file(file: &str) -> String {
     std::process::exit(1);
 }
 
-fn replace_tokes(source: String, vars: String, encode_as: String) -> String {
+fn replace_tokes(source: &String, vars: &String, encode_as: &String) -> String {
     let mut result: String;
     result = source.clone();
 
