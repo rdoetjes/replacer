@@ -20,6 +20,7 @@ fn main() -> std::io::Result<()> {
         return write_file(&args[4], &replaced);
     }
 }
+
 ///**write_file** writes the string contents in data to the file pointed to by the file parameters.
 ///
 /// # Parameters:
@@ -63,10 +64,10 @@ fn open_file(file: &str) -> String {
 ///     txt (no encoding)
 ///     html (html escaping)
 ///
-/// # Parameters
+/// # Parameters:
 ///     source: contains the string with the keys (tokens) that will be replaced
 ///     vars: contains the json string documenting a list in key value pair like:
-/// ```
+/// ```json
 /// {
 ///    "vars": {
 ///      "%env%": "D",
@@ -103,6 +104,14 @@ fn replace_tokens(source: &String, vars: &String, encode_as: &String) -> String 
     result
 }
 
+///check_args is a very rudimentary cli opt check. It sees whether there are at least 4 arguments.
+/// When there's less than 4 arguments, then the usage is printed and the application is exited with error code 1.
+///
+/// # Parameters:
+///     args: is a Vec<Strings> with the cli arguments, obtained by the statement:
+/// ```rust
+/// env::args().collect();
+/// ```
 fn check_args(args: &Vec<String>) {
     if args.len() < 4 {
         println!(
