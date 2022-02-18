@@ -59,7 +59,10 @@ fn replace_tokes(source: String, vars: String, encode_as: String) -> String {
 
 fn check_args(args: &Vec<String>) {
     if args.len() < 4 {
-        println!("usage replaced: <source> <variables> <encodeAs> [dest]");
+        println!(
+            "usage: {} <source> <variables> <encode: html|txt> [dest]",
+            args[0]
+        );
         std::process::exit(1);
     }
 }
