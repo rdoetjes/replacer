@@ -34,7 +34,7 @@ fn open_file(file: &str) -> String {
         return result;
     }
 
-    println!("File not found: {}", file);
+    eprintln!("File not found: {}", file);
     std::process::exit(1);
 }
 
@@ -57,7 +57,7 @@ fn replace_tokes(source: String, vars: String, encode_as: String) -> String {
             }
         }
     } else {
-        println!("ABORT: Your vars file should contain a field: vars");
+        eprintln!("ABORT: Your vars file should contain a field: vars");
         std::process::exit(1);
     }
     result
