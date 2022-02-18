@@ -20,7 +20,14 @@ fn main() -> std::io::Result<()> {
         return write_file(&args[4], &replaced);
     }
 }
-
+///**write_file** writes the string contents in data to the file pointed to by the file parameters.
+///
+/// # Parameters:
+///     file: is the path of the file we want to write to
+///     data: the string data we want to write into the file, pointed to by file parameter
+///
+/// # Returns
+///     an io::Result
 fn write_file(file: &str, data: &String) -> std::io::Result<()> {
     let mut file = File::create(file)?;
     file.write_all(data.as_bytes())?;
@@ -28,6 +35,16 @@ fn write_file(file: &str, data: &String) -> std::io::Result<()> {
     Ok(())
 }
 
+/// **open_file** will check if the file pointed to by the file parameters exists, if so it will read the contents of that file
+/// and return it to the caller. This is mainly used for text files!
+/// When the file can't be found, then we exit! As there's no further use in this application to continue.
+/// Usually you would let the main application make this decision, but for sake of code reduction, the exit is done by this function
+///
+/// # Parameters:
+///     file: is the path of the file we want to write to
+///
+/// # Returns:
+///     the contants from the file if succeeded.
 fn open_file(file: &str) -> String {
     let result: String;
 
@@ -40,6 +57,27 @@ fn open_file(file: &str) -> String {
     std::process::exit(1);
 }
 
+///replace_tokens will find all the keys listed in the json formatted vars
+/// parameter and replace those with the values associated in the json vars.
+/// The values can be encoded using:
+///     txt (no encoding)
+///     html (html escaping)
+///
+/// # Parameters
+///     source: contains the string with the keys (tokens) that will be replaced
+///     vars: contains the json string documenting a list in key value pair like:
+/// ```
+/// {
+///"vars": {
+///    "%env%": "D",
+///    "THIS": "<this>"
+///  }
+///}
+///```
+/// encode_as: can contain the string html (for html escaping) or txt (for no esaping/encoding)
+///
+/// # Returns:
+/// A new string with the replaced keys (tokens)
 fn replace_tokes(source: &String, vars: &String, encode_as: &String) -> String {
     let mut result: String;
     result = source.clone();
