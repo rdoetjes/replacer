@@ -107,9 +107,13 @@ mod test {
     fn test_replace_tokens() {
         let json = open_file("vars.json");
         let template = open_file("template.txt");
-        let mut result = replace_tokes(&template, &json, &String::from("txt"));
 
+        let mut result = replace_tokes(&template, &json, &String::from("txt"));
         assert_eq!(result.contains("Where you see D it should say D"), true);
+        assert_eq!(
+            result.contains("Where we see <this> it should say this"),
+            true
+        );
 
         result = replace_tokes(&template, &json, &String::from("html"));
         assert_eq!(result.contains(r#"&lt;this&gt;"#), true);
