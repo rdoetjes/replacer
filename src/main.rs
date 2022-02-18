@@ -2,16 +2,22 @@ extern crate html_escape;
 use std::env;
 use std::fs::{self, File};
 use std::io::Write;
+//use std::{error, result};
+
+//type TResult<T> = result::Result<T, TError>;
+//type TError = Box<dyn error::Error>;
 
 fn main() -> std::io::Result<()> {
     let args: Vec<String> = env::args().collect();
     check_args(&args);
+
     let source = open_file(&args[1]);
     let vars = open_file(&args[2]);
     let encode_as = &args[3];
     let replaced = replace_tokes(&source, &vars, &encode_as.to_string());
 
     println!("{}", replaced);
+
     if args.len() == 4 {
         return write_file(&args[1], &replaced);
     } else {
@@ -70,5 +76,34 @@ fn check_args(args: &Vec<String>) {
             args[0]
         );
         std::process::exit(1);
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_open_file() {
+        let result = open_file("template.txt");
+        assert_eq!(result.len(), 102);
+    }
+
+    #[test]
+    fn test_write_file() {
+        let result = write_file("test.unittest", &String::from("Testing"));
+        match result {
+            Ok(()) => assert_eq!(1, 1),
+            _ => assert_eq!(1, 0),
+        }
+
+        let result = open_file("test.unittest");
+        assert_eq!(result, "Testing");
+
+        let result = fs::remove_file("test.unittest");
+        match result {
+            Ok(()) => assert_eq!(1, 1),
+            _ => assert_eq!(1, 0),
+        }
     }
 }
