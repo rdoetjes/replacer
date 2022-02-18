@@ -112,6 +112,6 @@ mod test {
         assert_eq!(result.contains("Where you see D it should say D"), true);
 
         result = replace_tokes(&template, &json, &String::from("html"));
-        assert_eq!(result.contains("&lt;this&gt;"), true);
+        assert_eq!(result.contains(r#"&lt;this&gt;"#), true);
     }
 }
