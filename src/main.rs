@@ -111,7 +111,7 @@ mod test {
         let mut result = replace_tokes(&template, &json, &String::from("txt"));
         assert_eq!(result.contains("Where you see D it should say D"), true);
         assert_eq!(
-            result.contains("Where we see <this> it should say this"),
+            result.contains(r#"Where we see <this> it should say this"#),
             true
         );
 
