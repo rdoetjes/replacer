@@ -43,16 +43,22 @@ fn replace_tokes(source: String, vars: String, encode_as: String) -> String {
     result = source.clone();
 
     let json: serde_json::Value = serde_json::from_str(&vars).expect("JSON malformed");
-    for (key, _value) in json["vars"].as_object().unwrap() {
-        match encode_as.as_str() {
-            "html" => {
-                result = result.replace(
-                    key,
-                    &html_escape::encode_text(json["vars"][key].as_str().unwrap()),
-                )
+
+    if let Some(field) = json.get("vars") {
+        for (key, _value) in field.as_object().unwrap() {
+            match encode_as.as_str() {
+                "html" => {
+                    result = result.replace(
+                        key,
+                        &html_escape::encode_text(json["vars"][key].as_str().unwrap()),
+                    )
+                }
+                _ => result = result.replace(key, json["vars"][key].as_str().unwrap()),
             }
-            _ => result = result.replace(key, json["vars"][key].as_str().unwrap()),
         }
+    } else {
+        println!("ABORT: Your vars file should contain a field: vars");
+        std::process::exit(1);
     }
     result
 }
