@@ -2,10 +2,6 @@ extern crate html_escape;
 use std::env;
 use std::fs::{self, File};
 use std::io::Write;
-//use std::{error, result};
-
-//type TResult<T> = result::Result<T, TError>;
-//type TError = Box<dyn error::Error>;
 
 fn main() -> std::io::Result<()> {
     let args: Vec<String> = env::args().collect();
