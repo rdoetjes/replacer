@@ -68,13 +68,13 @@ fn open_file(file: &str) -> String {
 ///     source: contains the string with the keys (tokens) that will be replaced
 ///     vars: contains the json string documenting a list in key value pair like:
 /// ```json
-/// {
-///    "vars": {
+///{
+///   "vars": {
 ///      "%env%": "D",
 ///      "THIS": "<this>"
-///    }
-/// }
-///```
+///   }
+///}
+/// ```
 /// encode_as: can contain the string html (for html escaping) or txt (for no esaping/encoding)
 ///
 /// # Returns:
