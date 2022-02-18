@@ -21,9 +21,12 @@ Where we see THIS it should say this.
 
 ## encoding values into html
 You can encode the values from the variables json file into different encodings, like html
-target/release/replacer template.txt vars.json **html** out1.txt
-
+```txt
+target/release/replacer template.txt vars.json html out1.txt
+```
 
 ## encoding values into txt (no encoding)
 You can encode the values from the variables json file into different encodings, like html
-target/release/replacer template.txt vars.json **txt** out1.txt
+```txt
+replacer template.txt vars.json txt out1.txt
+```
