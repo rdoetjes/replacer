@@ -1,6 +1,6 @@
 {
     "vars": {
         "%env%": "D",
-        "THIS": "this"
+        "THIS": "<this>"
     }
 }

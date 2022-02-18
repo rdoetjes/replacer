@@ -1,3 +1,4 @@
+extern crate html_escape;
 use std::env;
 use std::fs::{self, File};
 use std::io::Write;
@@ -7,13 +8,14 @@ fn main() -> std::io::Result<()> {
     check_args(&args);
     let source = open_file(&args[1]);
     let vars = open_file(&args[2]);
-    let replaced = replace_tokes(source, vars);
+    let encode_as = &args[3];
+    let replaced = replace_tokes(source, vars, encode_as.to_string());
 
     println!("{}", replaced);
-    if args.len() == 3 {
+    if args.len() == 4 {
         return write_file(&args[1], &replaced);
     } else {
-        return write_file(&args[3], &replaced);
+        return write_file(&args[4], &replaced);
     }
 }
 
@@ -36,20 +38,28 @@ fn open_file(file: &str) -> String {
     std::process::exit(1);
 }
 
-fn replace_tokes(source: String, vars: String) -> String {
+fn replace_tokes(source: String, vars: String, encode_as: String) -> String {
     let mut result: String;
     result = source.clone();
 
     let json: serde_json::Value = serde_json::from_str(&vars).expect("JSON malformed");
     for (key, _value) in json["vars"].as_object().unwrap() {
-        result = result.replace(key, json["vars"][key].as_str().unwrap());
+        match encode_as.as_str() {
+            "html" => {
+                result = result.replace(
+                    key,
+                    &html_escape::encode_text(json["vars"][key].as_str().unwrap()),
+                )
+            }
+            _ => result = result.replace(key, json["vars"][key].as_str().unwrap()),
+        }
     }
     result
 }
 
 fn check_args(args: &Vec<String>) {
-    if args.len() < 3 {
-        println!("usage replaced <source> <variables> <dest>");
+    if args.len() < 4 {
+        println!("usage replaced: <source> <variables> <encodeAs> [dest]");
         std::process::exit(1);
     }
 }

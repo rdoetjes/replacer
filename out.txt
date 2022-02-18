@@ -1,3 +1,0 @@
-This is a template for D
-Where you see D it should say D
-Where we see this it should say this.
