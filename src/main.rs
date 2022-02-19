@@ -153,7 +153,6 @@ mod test {
     #[test]
     fn test_replace_tokens() {
         let json: String = String::from("{ \"vars\": { \"%env%\": \"D\", \"THIS\": \"<this>\"}}");
-        println!("{}", json);
         let mut template: String = String::from("Where you see %env% it should say D");
 
         let result = replace_tokens(&template, &json, &String::from("txt"));
