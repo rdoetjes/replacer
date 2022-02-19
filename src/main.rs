@@ -152,16 +152,21 @@ mod test {
 
     #[test]
     fn test_replace_tokens() {
-        let json = open_file("vars.json");
-        let template = open_file("template.txt");
+        let json: String = String::from("{ \"vars\": { \"%env%\": \"D\", \"THIS\": \"<this>\"}}");
+        println!("{}", json);
+        let mut template: String = String::from("Where you see %env% it should say D");
 
-        let mut result = replace_tokens(&template, &json, &String::from("txt"));
+        let result = replace_tokens(&template, &json, &String::from("txt"));
         assert_eq!(result.contains("Where you see D it should say D"), true);
+
+        template = String::from("Where we see THIS it should say this");
+        let mut result = replace_tokens(&template, &json, &String::from("txt"));
         assert_eq!(
             result.contains(r#"Where we see <this> it should say this"#),
             true
         );
 
+        template = String::from("THIS");
         result = replace_tokens(&template, &json, &String::from("html"));
         assert_eq!(result.contains(r#"&lt;this&gt;"#), true);
     }
