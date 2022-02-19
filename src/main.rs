@@ -29,7 +29,7 @@ fn main() -> std::io::Result<()> {
 ///
 /// # Returns
 ///     an io::Result
-fn write_file(file: &str, data: &String) -> std::io::Result<()> {
+fn write_file(file: &str, data: &str) -> std::io::Result<()> {
     let mut file = File::create(file)?;
     file.write_all(data.as_bytes())?;
     file.sync_all()?;
@@ -134,7 +134,7 @@ mod test {
 
     #[test]
     fn test_write_file() {
-        let result = write_file("test.unittest", &String::from("Testing"));
+        let result = write_file("test.unittest", "Testing");
         match result {
             Ok(()) => assert_eq!(1, 1),
             _ => assert_eq!(1, 0),
