@@ -79,15 +79,15 @@ fn open_file(file: &str) -> String {
 ///
 /// # Returns:
 /// A new string with the replaced keys (tokens)
-fn replace_tokens(source: &String, vars: &String, encode_as: &String) -> String {
+fn replace_tokens(source: &str, vars: &str, encode_as: &str) -> String {
     let mut result: String;
-    result = source.clone();
+    result = source.to_string();
 
     let json: serde_json::Value = serde_json::from_str(&vars).expect("JSON malformed");
 
     if let Some(field) = json.get("vars") {
         for (key, _value) in field.as_object().unwrap() {
-            match encode_as.as_str() {
+            match encode_as {
                 "html" => {
                     result = result.replace(
                         key,
