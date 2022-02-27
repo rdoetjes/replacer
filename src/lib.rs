@@ -1,4 +1,4 @@
-use std::fs::{self, File};
+use std::fs::File;
 use std::io::Write;
 
 ///**write_file** writes the string contents in data to the file pointed to by the file parameters.
@@ -14,28 +14,6 @@ pub fn write_file(file: &str, data: &str) -> std::io::Result<()> {
     file.write_all(data.as_bytes())?;
     file.sync_all()?;
     Ok(())
-}
-
-/// **open_file** will check if the file pointed to by the file parameters exists, if so it will read the contents of that file
-/// and return it to the caller. This is mainly used for text files!
-/// When the file can't be found, then we exit! As there's no further use in this application to continue.
-/// Usually you would let the main application make this decision, but for sake of code reduction, the exit is done by this function
-///
-/// # Arguments:
-/// file: is the path of the file we want to write to
-///
-/// # Returns:
-/// the contants from the file if succeeded.
-pub fn open_file(file: &str) -> String {
-    let result: String;
-
-    if std::path::Path::new(&file).exists() {
-        result = fs::read_to_string(file.to_string()).expect("Could not open file");
-        return result;
-    }
-
-    eprintln!("File not found: {}", file);
-    std::process::exit(1);
 }
 
 ///replace_tokens will find all the keys listed in the json formatted vars
@@ -89,12 +67,6 @@ mod test {
     use super::*;
 
     #[test]
-    fn test_open_file() {
-        let result = open_file("template.txt");
-        assert_eq!(result.len(), 102);
-    }
-
-    #[test]
     fn test_write_file() {
         let result = write_file("test.unittest", "Testing");
         match result {
@@ -102,10 +74,10 @@ mod test {
             _ => assert_eq!(1, 0),
         }
 
-        let result = open_file("test.unittest");
-        assert_eq!(result, "Testing");
+        let contents = std::fs::read_to_string("test.unittest".to_string()).unwrap();
+        assert_eq!(contents, "Testing");
 
-        let result = fs::remove_file("test.unittest");
+        let result = std::fs::remove_file("test.unittest");
         match result {
             Ok(()) => assert_eq!(1, 1),
             _ => assert_eq!(1, 0),

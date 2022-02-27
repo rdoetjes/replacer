@@ -1,5 +1,6 @@
 extern crate html_escape;
 use replacer::*;
+use std::fs;
 use std::{env, process};
 
 fn main() -> std::io::Result<()> {
@@ -8,8 +9,26 @@ fn main() -> std::io::Result<()> {
         process::exit(1);
     }
 
-    let source = open_file(&args[1]);
-    let vars = open_file(&args[2]);
+    let file: &str = &args[1];
+    let result = fs::read_to_string(file.to_string());
+    let source = match result {
+        Ok(source) => source,
+        Err(e) => {
+            eprintln!("Could not open template file {} error: {}", file, e);
+            process::exit(1)
+        }
+    };
+
+    let file: &str = &args[2];
+    let result = fs::read_to_string(file.to_string());
+    let vars = match result {
+        Ok(vars) => vars,
+        Err(e) => {
+            eprintln!("Could not open variabels file {} error: {}", file, e);
+            process::exit(1)
+        }
+    };
+
     let encode_as = &args[3];
     let replaced = replace_tokens(&source, &vars, &encode_as.to_string());
 
