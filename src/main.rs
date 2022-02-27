@@ -70,7 +70,7 @@ fn check_args(args: &Vec<String>) -> bool {
 
 #[cfg(test)]
 mod test {
-    use crate::check_args;
+    use super::*;
 
     #[test]
     fn test_check_args() {
@@ -82,5 +82,10 @@ mod test {
         assert_eq!(check_args(&validate), true);
         validate.push(String::from("five"));
         assert_eq!(check_args(&validate), true);
+    }
+
+    #[test]
+    fn test_read_file_or_exit() {
+        assert_eq!(read_file_or_exit("template.txt").len(), 102);
     }
 }
