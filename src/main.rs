@@ -9,13 +9,10 @@ fn main() -> std::io::Result<()> {
         process::exit(1);
     }
 
-    let file: &str = &args[1];
-    let source = read_file_or_exit(file);
-
-    let file: &str = &args[2];
-    let vars = read_file_or_exit(file);
-
+    let source = read_file_or_exit(&args[1]);
+    let vars = read_file_or_exit(&args[2]);
     let encode_as = &args[3];
+
     let replaced = replace_tokens(&source, &vars, &encode_as.to_string());
 
     println!("{}", replaced);
