@@ -10,24 +10,10 @@ fn main() -> std::io::Result<()> {
     }
 
     let file: &str = &args[1];
-    let result = fs::read_to_string(file.to_string());
-    let source = match result {
-        Ok(source) => source,
-        Err(e) => {
-            eprintln!("Could not open template file {} error: {}", file, e);
-            process::exit(1)
-        }
-    };
+    let source = read_file_or_exit(file);
 
     let file: &str = &args[2];
-    let result = fs::read_to_string(file.to_string());
-    let vars = match result {
-        Ok(vars) => vars,
-        Err(e) => {
-            eprintln!("Could not open variabels file {} error: {}", file, e);
-            process::exit(1)
-        }
-    };
+    let vars = read_file_or_exit(file);
 
     let encode_as = &args[3];
     let replaced = replace_tokens(&source, &vars, &encode_as.to_string());
@@ -39,6 +25,28 @@ fn main() -> std::io::Result<()> {
     } else {
         return write_file(&args[4], &replaced);
     }
+}
+
+// Tries to open and read the data from the file
+// When it fails, it will write an error to stderr and exits the application
+//
+// # Paramaters:
+// file: the file name to open and read from
+//
+// #Return:
+// the contents of the file when succeeds
+fn read_file_or_exit(file: &str) -> String {
+    let result = fs::read_to_string(file.to_string());
+
+    let contents = match result {
+        Ok(contents) => contents,
+        Err(e) => {
+            eprintln!("Could not open file {}\nError: {}", file, e);
+            process::exit(1)
+        }
+    };
+
+    contents
 }
 
 //check_args is a very rudimentary cli opt check. It sees whether there are at least 4 arguments.
