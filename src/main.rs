@@ -1,10 +1,12 @@
 extern crate html_escape;
 use replacer::*;
-use std::env;
+use std::{env, process};
 
 fn main() -> std::io::Result<()> {
     let args: Vec<String> = env::args().collect();
-    check_args(&args);
+    if !check_args(&args) {
+        process::exit(1);
+    }
 
     let source = open_file(&args[1]);
     let vars = open_file(&args[2]);
@@ -28,12 +30,30 @@ fn main() -> std::io::Result<()> {
 /// ```rust
 /// env::args().collect();
 /// ```
-fn check_args(args: &Vec<String>) {
+fn check_args(args: &Vec<String>) -> bool {
     if args.len() < 4 {
         println!(
             "usage: {} <source> <variables> <encode: html|txt> [dest]",
             args[0]
         );
-        std::process::exit(1);
+        return false;
+    }
+    return true;
+}
+
+#[cfg(test)]
+mod test {
+    use crate::check_args;
+
+    #[test]
+    fn test_check_args() {
+        let mut validate = Vec::from([String::from("one"), String::from("two")]);
+        assert_eq!(check_args(&validate), false);
+        validate.push(String::from("three"));
+        assert_eq!(check_args(&validate), false);
+        validate.push(String::from("four"));
+        assert_eq!(check_args(&validate), true);
+        validate.push(String::from("five"));
+        assert_eq!(check_args(&validate), true);
     }
 }
