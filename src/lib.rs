@@ -51,7 +51,7 @@ pub fn open_file(file: &str) -> String {
 ///{
 ///   "vars": {
 ///      "%env%": "D",
-///      "THIS": "<this>"
+///      "THIS": "that"
 ///   }
 ///}
 ///
