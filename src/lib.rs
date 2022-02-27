@@ -2,7 +2,7 @@ use std::fs::{self, File};
 use std::io::Write;
 use std::process;
 
-/// *read_file_or_exit* Tries to open and read the data from the file
+/// Tries to open and read the data from the file
 /// When it fails, it will write an error to stderr and exits the application
 ///
 /// # Paramaters:
@@ -24,9 +24,9 @@ pub fn read_file_or_exit(file: &str) -> String {
     contents
 }
 
-///**write_file** writes the string contents in data to the file pointed to by the file parameters.
+/// writes the string contents in data to the file pointed to by the file parameters.
 ///
-/// # A rguments:
+/// # Arguments:
 /// file: is the path of the file we want to write to
 /// data: the string data we want to write into the file, pointed to by file parameter
 ///
@@ -39,7 +39,7 @@ pub fn write_file(file: &str, data: &str) -> std::io::Result<()> {
     Ok(())
 }
 
-///replace_tokens will find all the keys listed in the json formatted vars
+/// will find all the keys listed in the json formatted vars
 /// parameter and replace those with the values associated in the json vars.
 /// The values can be encoded using:
 ///     txt (no encoding)
@@ -83,6 +83,22 @@ pub fn replace_tokens(source: &str, vars: &str, encode_as: &str) -> String {
         std::process::exit(1);
     }
     result
+}
+
+/// is a very rudimentary cli opt check. It sees whether there are at least 4 arguments.
+/// When there's less than 4 arguments, then the usage is printed and the application is exited with error code 1.
+///
+/// # Parameters:
+/// args: is a Vec<Strings> with the cli arguments, obtained by the statement: env::args().collect();
+pub fn check_args(args: &Vec<String>) -> bool {
+    if args.len() < 4 {
+        println!(
+            "usage: {} <source> <variables> <encode: html|txt> [dest]",
+            args[0]
+        );
+        return false;
+    }
+    return true;
 }
 
 #[cfg(test)]
@@ -130,5 +146,17 @@ mod test {
     #[test]
     fn test_read_file_or_exit() {
         assert_eq!(read_file_or_exit("template.txt").len(), 102);
+    }
+
+    #[test]
+    fn test_check_args() {
+        let mut validate = Vec::from([String::from("one"), String::from("two")]);
+        assert_eq!(check_args(&validate), false);
+        validate.push(String::from("three"));
+        assert_eq!(check_args(&validate), false);
+        validate.push(String::from("four"));
+        assert_eq!(check_args(&validate), true);
+        validate.push(String::from("five"));
+        assert_eq!(check_args(&validate), true);
     }
 }
