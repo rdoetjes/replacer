@@ -1,6 +1,5 @@
 extern crate html_escape;
 use replacer::*;
-use std::fs;
 use std::{env, process};
 
 fn main() -> std::io::Result<()> {
@@ -22,28 +21,6 @@ fn main() -> std::io::Result<()> {
     } else {
         return write_file(&args[4], &replaced);
     }
-}
-
-// Tries to open and read the data from the file
-// When it fails, it will write an error to stderr and exits the application
-//
-// # Paramaters:
-// file: the file name to open and read from
-//
-// #Return:
-// the contents of the file when succeeds
-fn read_file_or_exit(file: &str) -> String {
-    let result = fs::read_to_string(file.to_string());
-
-    let contents = match result {
-        Ok(contents) => contents,
-        Err(e) => {
-            eprintln!("Could not open file {}\nError: {}", file, e);
-            process::exit(1)
-        }
-    };
-
-    contents
 }
 
 //check_args is a very rudimentary cli opt check. It sees whether there are at least 4 arguments.
@@ -79,10 +56,5 @@ mod test {
         assert_eq!(check_args(&validate), true);
         validate.push(String::from("five"));
         assert_eq!(check_args(&validate), true);
-    }
-
-    #[test]
-    fn test_read_file_or_exit() {
-        assert_eq!(read_file_or_exit("template.txt").len(), 102);
     }
 }

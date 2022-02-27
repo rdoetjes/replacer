@@ -1,5 +1,28 @@
-use std::fs::File;
+use std::fs::{self, File};
 use std::io::Write;
+use std::process;
+
+/// *read_file_or_exit* Tries to open and read the data from the file
+/// When it fails, it will write an error to stderr and exits the application
+///
+/// # Paramaters:
+/// file: the file name to open and read from
+///
+/// # Returns:
+/// the contents of the file when succeeds
+pub fn read_file_or_exit(file: &str) -> String {
+    let result = fs::read_to_string(file.to_string());
+
+    let contents = match result {
+        Ok(contents) => contents,
+        Err(e) => {
+            eprintln!("Could not open file {}\nError: {}", file, e);
+            process::exit(1)
+        }
+    };
+
+    contents
+}
 
 ///**write_file** writes the string contents in data to the file pointed to by the file parameters.
 ///
@@ -102,5 +125,10 @@ mod test {
         template = "THIS";
         result = replace_tokens(&template, &json, &String::from("html"));
         assert_eq!(result.contains(r#"&lt;this&gt;"#), true);
+    }
+
+    #[test]
+    fn test_read_file_or_exit() {
+        assert_eq!(read_file_or_exit("template.txt").len(), 102);
     }
 }
