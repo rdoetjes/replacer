@@ -4,16 +4,50 @@
 # https://aka.ms/yaml
 
 trigger:
-- main
+  - main
 
-pool:
-  vmImage: ubuntu-latest
+stages:
+  - stage: Build
+    displayName: "Build linefollower"
+    jobs:
+      - job:
+        strategy:
+          matrix:
+            linux:
+              imageName: 'ubuntu-latest'
+              os: "lin"
+            mac:
+              imageName: 'macOS-latest'
+              os: "mac"
+            windows:
+              imageName: 'windows-latest'
+              os: "win"
+        pool: $(imageName)
+        steps:
+          - script: |
+              curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+            displayName: "Install Rust"
+          - script: |  
+              cargo test
+            condition: success
+            displayName: "Unit Tests"
+          - script: |
+              cargo build --release
+            condition: success
+            displayName: "Build Solution"
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+          - task: CopyFiles@2
+            condition: success
+            displayName: "Copy binaries only"
+            inputs:
+              SourceFolder: '$(Build.SourcesDirectory)/target/release/replacer'
+              Contents: '**'
+              TargetFolder: '$(Build.ArtifactStagingDirectory)/$(os)/replacer'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+        #Only build an artefact for main, not for our feature branches
+          - task: PublishBuildArtifacts@1
+            condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: replacer-$(os)
+              publishLocation: 'Container'
