@@ -78,7 +78,7 @@ stages:
         condition: succeeded()
         steps:
           - task: DownloadBuildArtifacts@1
-            displayName: "Linux"
+            displayName: "Artifects"
             inputs:
               buildType: 'current'
               downloadType: 'single'
