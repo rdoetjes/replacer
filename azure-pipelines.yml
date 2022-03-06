@@ -82,9 +82,10 @@ stages:
 
           #Download all artifacts and store them where source code is checked out
           - task: DownloadBuildArtifacts@1
-            displayName: "Artifects"
+            displayName: "Artifacts"
             inputs:
               buildType: 'current'
+              checkDownloadedFiles: true
               downloadPath: '$(Build.Repository.LocalPath)/binaries'
           #Add the binaries directory to git commit and merge to main.
           #the [skip ci] in remark prevents an infinite loop by skipping ci
