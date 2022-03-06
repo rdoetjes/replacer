@@ -29,7 +29,7 @@ stages:
           - script: |
               curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
             displayName: "Install Rust"
-            
+
           - script: |  
               cargo test
             condition: succeeded()
@@ -39,7 +39,10 @@ stages:
               cargo build --release
             condition: succeeded()
             displayName: "Build Solution"
-
+      - job:
+        displayName: "package artefsact"
+        dependsOn: succeeded()
+        steps:    
           - task: CopyFiles@2
             condition: succeeded()
             displayName: "Copy binaries only"
