@@ -11,6 +11,7 @@ stages:
     displayName: "Build Replacer"
     jobs:
       - job:
+        displayName: "Test and build"
         strategy:
           matrix:
             linux:
@@ -28,10 +29,12 @@ stages:
           - script: |
               curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
             displayName: "Install Rust"
+            
           - script: |  
               cargo test
             condition: succeeded()
             displayName: "Unit Tests"
+
           - script: |
               cargo build --release
             condition: succeeded()
