@@ -14,7 +14,7 @@ fn main() -> std::io::Result<()> {
 
     let replaced = replace_tokens(&source, &vars, &encode_as.to_string());
 
-    println!("{}", replaced);
+    println!("\n-------------\n{}\n-------------\n", replaced);
 
     if args.len() == 4 {
         return write_file(&args[1], &replaced);
