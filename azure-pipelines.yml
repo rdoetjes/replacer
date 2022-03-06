@@ -72,8 +72,9 @@ stages:
     displayName:  "Deploy to GIT"
     jobs:
       - job: gitclone
-        displayName: "Git Clone"
+        displayName: "Git Clone"  
         steps:
+          - checkout: none
           - script: |
                 echo 'Cloning into sources folder at: $(System.ArtifactsDirectory)/commit'
                 git clone https://github.com/rdoetjes/replacer $(System.ArtifactsDirectory)/commit
@@ -83,6 +84,7 @@ stages:
         dependsOn: gitclone
         condition: succeeded()
         steps:
+          - checkout: none
           - task: DownloadBuildArtifacts@1
             displayName: "Linux"
             inputs:
@@ -109,6 +111,7 @@ stages:
         condition: succeeded()
         displayName: "git commit and push"
         steps:
+        - checkout: none
         - task: CmdLine@2
           displayName: 'git push'
           inputs:
@@ -119,7 +122,7 @@ stages:
               git add 'replacer/binary/$(System.ArtifactsDirectory)/*'
               git commit -am "deployed binaries [skip ci]"
               git push
-              git tag -a build($Build.BuildNumber) -m "BUILD $(Build.BuildNumber)"
+              git tag -a build_$(Build.BuildNumber) -m "BUILD $(Build.BuildNumber)"
 
       
             
