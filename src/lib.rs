@@ -140,7 +140,7 @@ mod test {
 
         template = "THIS";
         result = replace_tokens(&template, &json, &String::from("html"));
-        assert_eq!(result.contains(r#"&lt;this&gt;"#), true);
+        assert_eq!(result.contains(r#"&lt;This&gt;"#), true);
     }
 
     #[cfg(any(target_os = "macos", target_os = "linux"))]
