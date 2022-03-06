@@ -66,3 +66,53 @@ stages:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)'
               ArtifactName: replacer-$(os)
               publishLocation: 'Container'
+  - stage: deploy
+    dependsOn: Build
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    displayName:  "Deploy to GIT"
+    jobs:
+      - deployment:
+        environment: 'GITREPLACER'
+        strategy:
+          runOnce:
+            deploy:                      
+              steps:
+                - task: CmdLine@2
+                  displayName: 'git clone'
+                  inputs:
+                    script: |
+                      echo 'Cloning into sources folder at: $(System.ArtifactsDirectory)'
+                      git clone https://github.com/rdoetjes/replacer $(System.ArtifactsDirectory)
+                      git branch -b binary
+                - task: DownloadBuildArtifacts@1
+                  displayName: "Linux"
+                  inputs:
+                    buildType: 'current'
+                    downloadType: 'single'
+                    artifactName: 'replacer-lin'
+                    downloadPath: 'replacer/binary/$(System.ArtifactsDirectory)'
+                - task: DownloadBuildArtifacts@1
+                  displayName: "MacOS"
+                  inputs:
+                    buildType: 'current'
+                    downloadType: 'single'
+                    artifactName: 'replacer-mac'
+                    downloadPath: 'replacer/binary/$(System.ArtifactsDirectory)'
+                - task: DownloadBuildArtifacts@1
+                  displayName: "Windows"
+                  inputs:
+                    buildType: 'current'
+                    downloadType: 'single'
+                    artifactName: 'replacer/binary/replacer-win'
+                    downloadPath: '$(System.ArtifactsDirectory)'
+                - task: CmdLine@2
+                  displayName: 'git clone'
+                  inputs:
+                    script: |
+                      echo 'git add'
+                      git add 'replacer/binary/$(System.ArtifactsDirectory)/*'
+                      git commit -am "deployed binaries"
+                      git push
+
+      
+            
