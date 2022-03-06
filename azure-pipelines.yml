@@ -95,6 +95,7 @@ stages:
           #the [skip ci] in remark prevents an infinite loop by skipping ci
           #and we tag this release
           - script: |
+                    set -e
                     git config --global user.email "buildagent@phonax.com"
                     git config --global user.name "Build Agent"
                     git branch binaries
