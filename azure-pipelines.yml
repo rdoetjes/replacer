@@ -72,44 +72,31 @@ stages:
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     displayName:  "Deploy to GIT"
     jobs:
-      #Clone the repositry (do not use checkout as that is a detached HEAD)
       - job: enrich
         displayName: "Enrich Repo with binary artifacts"
         condition: succeeded()
         steps:
+          #Presist credentilas to do the push
+          - checkout: self
+            persistCredentials: true
+
+          #Download all artifacts and store them where source code is checked out
           - task: DownloadBuildArtifacts@1
             displayName: "Artifects"
             inputs:
               buildType: 'current'
               downloadType: 'single'
               downloadPath: '$(Build.Repository.LocalPath)/binaries'
+          #Add the binaries directory to git commit and merge to main.
+          #the [skip ci] in remark prevents an infinite loop by skipping ci
+          #and we tag this release
           - script: |
-                    git config --global user.email "rdoetjes@phonax.com"
+                    git config --global user.email "buildagent@phonax.com"
                     git config --global user.name "Build Agent"
                     git branch binaries
                     git checkout main
                     git merge binaries
                     git add 'binaries/*'
-                    git commit -am "deployed linux binaries [skip ci]"
+                    git commit -am "deployed binaries [skip ci]"
                     git push
                     git tag -a build_$(Build.BuildNumber) -m "BUILD $(Build.BuildNumber)"
-          # - task: DownloadBuildArtifacts@1
-          #   displayName: "MacOS"
-          #   inputs:
-          #     buildType: 'current'
-          #     downloadType: 'single'
-          #     artifactName: 'replacer-mac'
-          #     downloadPath: '$(System.ArtifactsDirectory)/commit/replacer/binaries/'
-
-          # - task: DownloadBuildArtifacts@1
-          #   displayName: "Windows"
-          #   inputs:
-          #     buildType: 'current'
-          #     downloadType: 'single'
-          #     artifactName: 'replacer/binary/replacer-win'
-          #     downloadPath: '$(System.ArtifactsDirectory)/commit/replacer/binaries/'
-      #Commit and push the added build binaries to the reposistory, suppress a build by using [skip ci]
-      
-
-      
-            
