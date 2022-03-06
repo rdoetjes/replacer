@@ -78,7 +78,7 @@ stages:
         displayName: "Enrich Repo with binary artifacts"
         condition: succeeded()
         steps:
-          #Presist credentilas to do the push
+          #Persist git credentials to do the pushanf commit later on
           - checkout: self
             persistCredentials: true
 
