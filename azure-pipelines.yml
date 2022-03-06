@@ -75,7 +75,6 @@ stages:
       #Clone the repositry (do not use checkout as that is a detached HEAD)
       - job: enrich
         displayName: "Enrich Repo wit artifacts"
-        dependsOn: gitclone
         condition: succeeded()
         steps:
           - task: DownloadBuildArtifacts@1
