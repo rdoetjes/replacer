@@ -10,9 +10,11 @@ stages:
   - stage: Build
     displayName: "Build Replacer"
     jobs:
+      #Test and build for Linux, Windows and MacOS
       - job: build
         displayName: "Test and build"
         strategy:
+          #Use the following Azure build agents and set the os variable (used in artifact name)
           matrix:
             linux:
               imageName: 'ubuntu-latest'
@@ -23,23 +25,29 @@ stages:
             windows:
               imageName: 'windows-latest'
               os: "win"
+        #Use the Azure vmImage to build the solution
         pool: 
           vmImage: $(imageName)
-        steps:            
+
+        steps: 
+          #Install rust on the Azure build agent           
           - script: |
               curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
             displayName: "Install Rust"
 
+          #Run the unit tests of our software. Do this onlyt when install rust succeeded
           - script: |  
               cargo test
             condition: succeeded()
             displayName: "Unit Tests"
 
+          #Build the release. Do this only when tests succeeded
           - script: |
               cargo build --release
             condition: succeeded()
             displayName: "Build Solution"  
 
+          #Copy the binaries to this artifact staging directory called: <os>/<binary>
           - task: CopyFiles@2
             condition: succeeded()
             displayName: "Copy binaries only"
@@ -50,6 +58,7 @@ stages:
                 replacer.exe
               TargetFolder: '$(Build.ArtifactStagingDirectory)/$(os)/'
 
+          #Build the artifect for each os. Name the artidact replace-<os>
           - task: PublishBuildArtifacts@1
             displayName: "Package artifact"
             condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
