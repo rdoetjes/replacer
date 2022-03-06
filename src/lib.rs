@@ -143,9 +143,16 @@ mod test {
         assert_eq!(result.contains(r#"&lt;this&gt;"#), true);
     }
 
+    #[cfg(any(target_os = "macos", target_os = "linux"))]
     #[test]
     fn test_read_file_or_exit() {
         assert_eq!(read_file_or_exit("template.txt").len(), 102);
+    }
+
+    #[cfg(target_os = "windows")]
+    #[test]
+    fn test_read_file_or_exit() {
+        assert_eq!(read_file_or_exit("template.txt").len(), 104);
     }
 
     #[test]
