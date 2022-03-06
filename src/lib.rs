@@ -140,7 +140,7 @@ mod test {
 
         template = "THIS";
         result = replace_tokens(&template, &json, &String::from("html"));
-        assert_eq!(result.contains(r#"&lt;This&gt;"#), true);
+        assert_eq!(result.contains(r#"&lt;this&gt;"#), true);
     }
 
     #[cfg(any(target_os = "macos", target_os = "linux"))]
@@ -152,7 +152,7 @@ mod test {
     #[cfg(target_os = "windows")]
     #[test]
     fn test_read_file_or_exit() {
-        assert_eq!(read_file_or_exit("template.txt").len(), 104);
+        assert_eq!(read_file_or_exit("template.txt").len(), 102);
     }
 
     #[test]
