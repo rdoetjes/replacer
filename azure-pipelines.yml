@@ -22,7 +22,8 @@ stages:
             windows:
               imageName: 'windows-latest'
               os: "win"
-        pool: $(imageName)
+        pool: 
+          vmImage: $(imageName)
         steps:
           - script: |
               curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
