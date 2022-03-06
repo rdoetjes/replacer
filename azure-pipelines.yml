@@ -84,7 +84,7 @@ stages:
 
           #Download all artifacts and store them where source code is checked out
           - task: DownloadBuildArtifacts@1
-            displayName: "Artifacts"
+            displayName: "Merge Artifacts in Repo"
             inputs:
               buildVersionToDownload: latest
               buildType: current
