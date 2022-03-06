@@ -38,11 +38,8 @@ stages:
           - script: |
               cargo build --release
             condition: succeeded()
-            displayName: "Build Solution"
-      - job:
-        displayName: "package artefsact"
-        dependsOn: succeeded()
-        steps:    
+            displayName: "Build Solution"  
+
           - task: CopyFiles@2
             condition: succeeded()
             displayName: "Copy binaries only"
@@ -52,8 +49,10 @@ stages:
                 replacer
                 replacer.exe
               TargetFolder: '$(Build.ArtifactStagingDirectory)/$(os)/'
-
-        #Only build an artefact for main, not for our feature branches
+      - job:
+        dependsOn: succeeded()
+        displayName: "Create artefact"
+        steps:
           - task: PublishBuildArtifacts@1
             condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
             inputs:
