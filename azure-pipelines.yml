@@ -72,6 +72,7 @@ stages:
     displayName:  "Deploy to GIT"
     jobs:
       - job: gitclone
+        displayName: "Git Clone"
       - deployment:
         environment: 'GITREPLACER'
         strategy:
@@ -84,44 +85,56 @@ stages:
                       env "##vso[task.setvariable variable=task.GITCLONE.status]Success"      
                   displayName: "Git Clone"
       - job: enrich
+        displayName: "Download Artifects"
         dependsOn: gitclone
         condition: succeeded()
-        steps:
-          - task: DownloadBuildArtifacts@1
-            displayName: "Linux"
-            inputs:
-              buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'replacer-lin'
-              downloadPath: 'replacer/binary/$(System.ArtifactsDirectory)'
-          - task: DownloadBuildArtifacts@1
-            displayName: "MacOS"
-            inputs:
-              buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'replacer-mac'
-              downloadPath: 'replacer/binary/$(System.ArtifactsDirectory)'
-          - task: DownloadBuildArtifacts@1
-            displayName: "Windows"
-            inputs:
-              buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'replacer/binary/replacer-win'
-              downloadPath: '$(System.ArtifactsDirectory)'
+      - deployment:
+        environment: 'GITREPLACER'
+        strategy:
+          runOnce:
+            deploy:        
+              steps:
+                - task: DownloadBuildArtifacts@1
+                  displayName: "Linux"
+                  inputs:
+                    buildType: 'current'
+                    downloadType: 'single'
+                    artifactName: 'replacer-lin'
+                    downloadPath: 'replacer/binary/$(System.ArtifactsDirectory)'
+                - task: DownloadBuildArtifacts@1
+                  displayName: "MacOS"
+                  inputs:
+                    buildType: 'current'
+                    downloadType: 'single'
+                    artifactName: 'replacer-mac'
+                    downloadPath: 'replacer/binary/$(System.ArtifactsDirectory)'
+                - task: DownloadBuildArtifacts@1
+                  displayName: "Windows"
+                  inputs:
+                    buildType: 'current'
+                    downloadType: 'single'
+                    artifactName: 'replacer/binary/replacer-win'
+                    downloadPath: '$(System.ArtifactsDirectory)'
       - job: push
         dependsOn: enrich
         condition: succeeded()
-        steps:
-          - task: CmdLine@2
-            displayName: 'git push'
-            inputs:
-              script: |
-                echo 'git add'
-                git config --global user.email "rdoetjes@phonax.com"
-                git config --global user.name "Build Agent"
-                git add 'replacer/binary/$(System.ArtifactsDirectory)/*'
-                git commit -am "deployed binaries [skip ci]"
-                git push
+        displayName: "git commit and push"
+      - deployment:
+        environment: 'GITREPLACER'
+        strategy:
+          runOnce:
+            deploy:        
+              steps:
+              - task: CmdLine@2
+                displayName: 'git push'
+                inputs:
+                  script: |
+                    echo 'git add'
+                    git config --global user.email "rdoetjes@phonax.com"
+                    git config --global user.name "Build Agent"
+                    git add 'replacer/binary/$(System.ArtifactsDirectory)/*'
+                    git commit -am "deployed binaries [skip ci]"
+                    git push
 
       
             
