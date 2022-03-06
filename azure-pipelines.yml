@@ -82,7 +82,6 @@ stages:
             inputs:
               buildType: 'current'
               downloadType: 'single'
-              artifactName: 'replacer-lin'
               downloadPath: '$(System.ArtifactsDirectory)/binaries'
           - script: |
                     git config --global user.email "rdoetjes@phonax.com"
