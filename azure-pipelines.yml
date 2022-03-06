@@ -19,12 +19,12 @@ stages:
             linux:
               imageName: 'ubuntu-latest'
               os: "lin"
-            mac:
-              imageName: 'macOS-latest'
-              os: "mac"
-            windows:
-              imageName: 'windows-latest'
-              os: "win"
+            # mac:
+            #   imageName: 'macOS-latest'
+            #   os: "mac"
+            # windows:
+            #   imageName: 'windows-latest'
+            #   os: "win"
         #Use the Azure vmImage to build the solution
         pool: 
           vmImage: $(imageName)
@@ -75,9 +75,8 @@ stages:
         displayName: "Git Clone"
         steps:
           - script: |
-                echo 'Cloning into sources folder at: $(System.ArtifactsDirectory)'
-                git clone https://github.com/rdoetjes/replacer $(System.ArtifactsDirectory)
-                env "##vso[task.setvariable variable=task.GITCLONE.status]Success"      
+                echo 'Cloning into sources folder at: $(System.ArtifactsDirectory)/commit'
+                git clone https://github.com/rdoetjes/replacer $(System.ArtifactsDirectory)/commit
             displayName: "Git Clone"
       - job: enrich
         displayName: "Download Artifects"
@@ -90,21 +89,21 @@ stages:
               buildType: 'current'
               downloadType: 'single'
               artifactName: 'replacer-lin'
-              downloadPath: 'replacer/binary/$(System.ArtifactsDirectory)'
+              downloadPath: '$(System.ArtifactsDirectory)/commit/replacer/binaries/'
           - task: DownloadBuildArtifacts@1
             displayName: "MacOS"
             inputs:
               buildType: 'current'
               downloadType: 'single'
               artifactName: 'replacer-mac'
-              downloadPath: 'replacer/binary/$(System.ArtifactsDirectory)'
+              downloadPath: '$(System.ArtifactsDirectory)/commit/replacer/binaries/'
           - task: DownloadBuildArtifacts@1
             displayName: "Windows"
             inputs:
               buildType: 'current'
               downloadType: 'single'
               artifactName: 'replacer/binary/replacer-win'
-              downloadPath: '$(System.ArtifactsDirectory)'
+              downloadPath: '$(System.ArtifactsDirectory)/commit/replacer/binaries/'
       - job: push
         dependsOn: enrich
         condition: succeeded()
@@ -114,12 +113,13 @@ stages:
           displayName: 'git push'
           inputs:
             script: |
-              echo 'git add'
+              cd $(System.ArtifactsDirectory)/commit/replacer/
               git config --global user.email "rdoetjes@phonax.com"
               git config --global user.name "Build Agent"
               git add 'replacer/binary/$(System.ArtifactsDirectory)/*'
               git commit -am "deployed binaries [skip ci]"
               git push
+              git tag -a build($Build.BuildNumber) -m "BUILD $(Build.BuildNumber)"
 
       
             
