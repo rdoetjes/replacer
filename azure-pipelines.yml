@@ -77,39 +77,17 @@ stages:
         displayName: "Enrich Repo with binary artifacts"
         condition: succeeded()
         steps:
-          - task: DownloadBuildArtifacts@1
-            displayName: "Linux"
-            inputs:
-              buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'replacer-lin'
-              downloadPath: '$(System.ArtifactsDirectory)'
+          - download: current
           - script: |
                     git config --global user.email "rdoetjes@phonax.com"
                     git config --global user.name "Build Agent"
-                    git branch binarylinux
+                    git branch binaries
                     git checkout master
-                    git merge binarylinux
+                    git merge binaries
                     git add 'binaries/*'
-                    git commit -am "deployed linux binaries [skip ci]"
+                    git commit -am "deployed binaries [skip ci]"
                     git push
                     git tag -a build_$(Build.BuildNumber) -m "BUILD $(Build.BuildNumber)"
-          # - task: DownloadBuildArtifacts@1
-          #   displayName: "MacOS"
-          #   inputs:
-          #     buildType: 'current'
-          #     downloadType: 'single'
-          #     artifactName: 'replacer-mac'
-          #     downloadPath: '$(System.ArtifactsDirectory)/commit/replacer/binaries/'
-
-          # - task: DownloadBuildArtifacts@1
-          #   displayName: "Windows"
-          #   inputs:
-          #     buildType: 'current'
-          #     downloadType: 'single'
-          #     artifactName: 'replacer/binary/replacer-win'
-          #     downloadPath: '$(System.ArtifactsDirectory)/commit/replacer/binaries/'
-      #Commit and push the added build binaries to the reposistory, suppress a build by using [skip ci]
       
 
       
