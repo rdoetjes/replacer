@@ -152,7 +152,7 @@ mod test {
     #[cfg(target_os = "windows")]
     #[test]
     fn test_read_file_or_exit() {
-        assert_eq!(read_file_or_exit("template.txt").len(), 102);
+        assert_eq!(read_file_or_exit("template.txt").len(), 104);
     }
 
     #[test]
