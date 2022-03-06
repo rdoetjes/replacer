@@ -49,13 +49,9 @@ stages:
                 replacer
                 replacer.exe
               TargetFolder: '$(Build.ArtifactStagingDirectory)/$(os)/'
-              
-      - job: packaging
-        dependsOn: build
-        condition: succeeded()
-        displayName: "Package artifact"
-        steps:
+
           - task: PublishBuildArtifacts@1
+            displayName: "Package artifact"
             condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
             inputs:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)'
