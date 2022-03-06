@@ -41,7 +41,7 @@ stages:
             condition: succeeded()
             displayName: "Copy binaries only"
             inputs:
-              SourceFolder: '$(Build.SourcesDirectory)/target/release/replacer'
+              SourceFolder: '$(Build.SourcesDirectory)/replacer/target/release/replacer'
               Contents: '**'
               TargetFolder: '$(Build.ArtifactStagingDirectory)/$(os)/replacer'
 
