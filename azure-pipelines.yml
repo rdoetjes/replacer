@@ -100,3 +100,4 @@ stages:
                     git commit -am "deployed binaries [skip ci]"
                     git push
                     git tag -a build_$(Build.BuildNumber) -m "BUILD $(Build.BuildNumber)"
+            displayName: "Enrich repo with binaries"
