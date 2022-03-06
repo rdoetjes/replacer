@@ -74,7 +74,7 @@ stages:
     jobs:
       #Clone the repositry (do not use checkout as that is a detached HEAD)
       - job: enrich
-        displayName: "Enrich Repo wit artifacts"
+        displayName: "Enrich Repo with binary artifacts"
         condition: succeeded()
         steps:
           - task: DownloadBuildArtifacts@1
@@ -83,15 +83,15 @@ stages:
               buildType: 'current'
               downloadType: 'single'
               artifactName: 'replacer-lin'
-              downloadPath: '$(System.ArtifactsDirectory)replacer/binaries/'
+              downloadPath: '$(System.ArtifactsDirectory)/replacer/binaries/'
           - script: |
-                    cd $(System.ArtifactsDirectory)/commit/replacer/
+                    cd $(System.ArtifactsDirectory)/replacer/
                     git config --global user.email "rdoetjes@phonax.com"
                     git config --global user.name "Build Agent"
-                    git branch binary
+                    git branch binarylinux
                     git checkout master
-                    git merge binary
-                    git add 'replacer/binary/$(System.ArtifactsDirectory)/*'
+                    git merge binarylinux
+                    git add 'replacer/binaries/*'
                     git commit -am "deployed linux binaries [skip ci]"
                     git push
                     git tag -a build_$(Build.BuildNumber) -m "BUILD $(Build.BuildNumber)"
