@@ -42,7 +42,7 @@ stages:
             displayName: "Copy binaries only"
             inputs:
               SourceFolder: '$(Build.SourcesDirectory)/target/release/'
-              Contents: 'replacer'
+              Contents: '*'
               TargetFolder: '$(Build.ArtifactStagingDirectory)/$(os)/'
 
         #Only build an artefact for main, not for our feature branches
