@@ -85,8 +85,8 @@ stages:
             displayName: "Artifacts"
             inputs:
               buildVersionToDownload: latest
-              buildType: 'current'
-              specificBuildWithTriggering: true
+              buildType: current
+              downloadType: specific
               checkDownloadedFiles: true
               downloadPath: '$(Build.Repository.LocalPath)/binaries'
           #Add the binaries directory to git commit and merge to main.
