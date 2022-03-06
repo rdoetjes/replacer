@@ -102,9 +102,9 @@ stages:
                     git checkout main
                     git merge binaries
                     git add 'binaries/*'
-                    git add --chmod=+x -- replacer/binaries/x64/replacer-x64-linux/replacer
-                    git add --chmod=+x -- replacer/binaries/x64/replacer-x64-mac/replacer
-                    git add --chmod=+x -- replacer/binaries/x64/replacer-x64-win/replacer.exe
+                    git add --chmod=+x -- binaries/x64/replacer-x64-lin/replacer
+                    git add --chmod=+x -- binaries/x64/replacer-x64-mac/replacer
+                    git add --chmod=+x -- binaries/x64/replacer-x64-win/replacer.exe
                     git commit -am "deployed binaries [skip ci]"
                     git push
                     git tag -a build_$(Build.BuildNumber) -m "BUILD $(Build.BuildNumber)"
