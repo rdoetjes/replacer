@@ -8,7 +8,7 @@ trigger:
 
 stages:
   - stage: Build
-    displayName: "Build linefollower"
+    displayName: "Build Replacer"
     jobs:
       - job:
         strategy:
