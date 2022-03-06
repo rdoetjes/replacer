@@ -41,9 +41,9 @@ stages:
             condition: succeeded()
             displayName: "Copy binaries only"
             inputs:
-              SourceFolder: '$(Build.SourcesDirectory)/replacer/target/release/replacer'
+              SourceFolder: '$(Build.SourcesDirectory)/target/release/*'
               Contents: '**'
-              TargetFolder: '$(Build.ArtifactStagingDirectory)/$(os)/replacer'
+              TargetFolder: '$(Build.ArtifactStagingDirectory)/$(os)/'
 
         #Only build an artefact for main, not for our feature branches
           - task: PublishBuildArtifacts@1
