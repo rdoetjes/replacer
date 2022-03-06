@@ -82,7 +82,7 @@ stages:
             inputs:
               buildType: 'current'
               downloadType: 'single'
-              downloadPath: '$(System.ArtifactsDirectory)/binaries'
+              downloadPath: '$(Build.Repository.LocalPath)/binaries'
           - script: |
                     git config --global user.email "rdoetjes@phonax.com"
                     git config --global user.name "Build Agent"
