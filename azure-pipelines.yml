@@ -24,21 +24,21 @@ stages:
               os: "win"
         pool: 
           vmImage: $(imageName)
-        steps:
+        steps:            
           - script: |
               curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
             displayName: "Install Rust"
           - script: |  
               cargo test
-            condition: success
+            condition: succeeded()
             displayName: "Unit Tests"
           - script: |
               cargo build --release
-            condition: success
+            condition: succeeded()
             displayName: "Build Solution"
 
           - task: CopyFiles@2
-            condition: success
+            condition: succeeded()
             displayName: "Copy binaries only"
             inputs:
               SourceFolder: '$(Build.SourcesDirectory)/target/release/replacer'
