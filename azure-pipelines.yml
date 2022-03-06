@@ -56,7 +56,7 @@ stages:
               Contents: |
                 replacer
                 replacer.exe
-              TargetFolder: '$(Build.ArtifactStagingDirectory)/$(os)/'
+              TargetFolder: '$(Build.ArtifactStagingDirectory)/'
 
           #Build the artifect for each os. Name the artidact replace-<os>
           - task: PublishBuildArtifacts@1
@@ -90,20 +90,20 @@ stages:
               downloadType: 'single'
               artifactName: 'replacer-lin'
               downloadPath: '$(System.ArtifactsDirectory)/commit/replacer/binaries/'
-          - task: DownloadBuildArtifacts@1
-            displayName: "MacOS"
-            inputs:
-              buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'replacer-mac'
-              downloadPath: '$(System.ArtifactsDirectory)/commit/replacer/binaries/'
-          - task: DownloadBuildArtifacts@1
-            displayName: "Windows"
-            inputs:
-              buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'replacer/binary/replacer-win'
-              downloadPath: '$(System.ArtifactsDirectory)/commit/replacer/binaries/'
+          # - task: DownloadBuildArtifacts@1
+          #   displayName: "MacOS"
+          #   inputs:
+          #     buildType: 'current'
+          #     downloadType: 'single'
+          #     artifactName: 'replacer-mac'
+          #     downloadPath: '$(System.ArtifactsDirectory)/commit/replacer/binaries/'
+          # - task: DownloadBuildArtifacts@1
+          #   displayName: "Windows"
+          #   inputs:
+          #     buildType: 'current'
+          #     downloadType: 'single'
+          #     artifactName: 'replacer/binary/replacer-win'
+          #     downloadPath: '$(System.ArtifactsDirectory)/commit/replacer/binaries/'
       - job: push
         dependsOn: enrich
         condition: succeeded()
