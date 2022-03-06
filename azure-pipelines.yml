@@ -81,7 +81,7 @@ stages:
             persistCredentials: true
 
           #Download all artifacts and store them where source code is checked out
-          - task: DownloadBuildArtifacts@2
+          - task: DownloadBuildArtifacts@1
             displayName: "Artifacts"
             inputs:
               buildType: 'current'
