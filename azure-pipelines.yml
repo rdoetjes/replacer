@@ -19,12 +19,12 @@ stages:
             linux:
               imageName: 'ubuntu-latest'
               os: "lin"
-            # mac:
-            #   imageName: 'macOS-latest'
-            #   os: "mac"
-            # windows:
-            #   imageName: 'windows-latest'
-            #   os: "win"
+            mac:
+              imageName: 'macOS-latest'
+              os: "mac"
+            windows:
+              imageName: 'windows-latest'
+              os: "win"
         #Use the Azure vmImage to build the solution
         pool: 
           vmImage: $(imageName)
