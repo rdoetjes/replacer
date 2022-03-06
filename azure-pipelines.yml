@@ -76,11 +76,11 @@ stages:
         steps:
           - checkout: none
           - script: |
-                echo 'Cloning into sources folder at: $(System.ArtifactsDirectory)/commit'
-                git clone https://github.com/rdoetjes/replacer $(System.ArtifactsDirectory)/commit
+                echo 'Cloning into sources folder at: $(System.ArtifactsDirectory)/commit/replacer'
+                git clone https://github.com/rdoetjes/replacer $(System.ArtifactsDirectory)/commit/replacer
             displayName: "Git Clone"
       - job: enrich
-        displayName: "Download Artifects"
+        displayName: "Enrich Repo wit artifacts"
         dependsOn: gitclone
         condition: succeeded()
         steps:
