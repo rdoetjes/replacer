@@ -30,7 +30,7 @@ stages:
           vmImage: $(imageName)
 
         steps: 
-          #Run cargo test, cargo build --release
+          #INSTALLS RUST then runs: cargo test, cargo build --release
           - template: pipeline-templates/rust-build.yml
 
           #Copy the binaries to this artifact staging directory called: <os>/<binary>
