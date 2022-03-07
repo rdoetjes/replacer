@@ -30,22 +30,24 @@ stages:
           vmImage: $(imageName)
 
         steps: 
+          - template: rust-build.yml
+          
           #Install rust on the Azure build agent           
-          - script: |
-              curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-            displayName: "Install Rust"
+          # - script: |
+          #     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+          #   displayName: "Install Rust"
 
-          #Run the unit tests of our software. Do this onlyt when install rust succeeded
-          - script: |  
-              cargo test
-            condition: succeeded()
-            displayName: "Unit Tests"
+          # #Run the unit tests of our software. Do this onlyt when install rust succeeded
+          # - script: |  
+          #     cargo test
+          #   condition: succeeded()
+          #   displayName: "Unit Tests"
 
-          #Build the release. Do this only when tests succeeded
-          - script: |
-              cargo build --release
-            condition: succeeded()
-            displayName: "Build Solution"  
+          # #Build the release. Do this only when tests succeeded
+          # - script: |
+          #     cargo build --release
+          #   condition: succeeded()
+          #   displayName: "Build Solution"  
 
           #Copy the binaries to this artifact staging directory called: <os>/<binary>
           - task: CopyFiles@2
@@ -66,6 +68,7 @@ stages:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)'
               ArtifactName: replacer-x64-$(os)
               publishLocation: 'Container'
+
   #Deploy the succesfully build binaries into replacer git repo under directory binaries
   - stage: deploy
     dependsOn: Build
