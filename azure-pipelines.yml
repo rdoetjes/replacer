@@ -32,7 +32,8 @@ stages:
         steps: 
           #INSTALLS RUST then runs: cargo test, cargo build --release
           - template: pipeline-templates/rust-build.yml
-
+          - script: |
+              echo yeah $(Install.installed)
           #Copy the binaries to this artifact staging directory called: <os>/<binary>
           - task: CopyFiles@2
             condition: succeeded()
