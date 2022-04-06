@@ -2,9 +2,7 @@
 steps:
   - script: |
       curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-      echo "##vso[task.setvariable variable=installed;isoutput=true]installed"
     displayName: "Install Rust"
-    name: Install
 
   #Run the unit tests of our software. Do this onlyt when install rust succeeded
   - script: |
