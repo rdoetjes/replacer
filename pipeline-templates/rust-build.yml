@@ -2,7 +2,7 @@
 steps:
   - script: |
       curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-      echo #vso[task.setvariable variable=installed;isOutput=true]InstalledBaby
+      echo "##vso[task.setvariable variable=installed;isoutput=true]this is the same job too"
     displayName: "Install Rust"
     name: Install
 
